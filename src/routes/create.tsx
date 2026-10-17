@@ -214,8 +214,8 @@ function Composer() {
       )}
 
       <Sheet open={sheet !== null} onOpenChange={(o) => !o && setSheet(null)}>
-        <SheetContent side="bottom" className="max-h-[80dvh] overflow-y-auto">
-          {sheet === "music" && <MusicPicker value={music} onPick={(m) => { setMusic(m); setSheet(null); }} />}
+        <SheetContent side="bottom" className={cn("overflow-y-auto rounded-t-2xl", sheet === "music" ? "h-[92dvh] p-0" : "max-h-[80dvh]")}>
+          {sheet === "music" && <MusicPicker kind={type} value={music} onPick={(m) => { setMusic(m); setSheet(null); }} />}
           {sheet === "location" && (
             <TextSheet title="Add location" placeholder="Search a place, e.g. Hyderabad" value={f.location} icon={MapPin}
               suggestions={["Hyderabad, India", "Mumbai, India", "Bengaluru, India", "Chennai, India", "Delhi, India", "Goa, India"]}

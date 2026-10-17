@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Home, Compass, Bell, Menu, Film, Ticket, LogOut, Settings, X, Heart } from "lucide-react";
@@ -13,6 +13,7 @@ const active = { className: "!text-primary bg-secondary" };
 
 export function Header() {
   const { profile, userId } = useAuth();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const { data: unread = 0, refetch } = useQuery({
@@ -53,6 +54,8 @@ export function Header() {
       <Link to="/messages" className={linkCls} activeProps={active} aria-label="Messages"><span aria-hidden="true" className="text-lg leading-none">🗣️</span></Link>
     </>
   );
+
+  if (pathname.startsWith("/create")) return null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-xl">
