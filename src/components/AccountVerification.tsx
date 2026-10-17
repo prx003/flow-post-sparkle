@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { BadgeCheck, LockKeyhole, Upload } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { verificationFields, verificationDocuments } from "@/lib/verification";
@@ -25,12 +25,14 @@ function VerificationForm({ account }: { account: "business" | "personal" }) {
         <BadgeCheck className="h-7 w-7 shrink-0 text-primary" />
         <div>
           <h2 className="font-bold">{business ? "Business verification" : "Personal KYC verification"}</h2>
-          <p className="text-sm text-muted-foreground">{business ? "Business, owner and shop details" : "Identity and residential details"}</p>
+          <p className="text-sm text-muted-foreground">{business ? "Business, shop or firm details and representative KYC" : "Identity and residential details"}</p>
         </div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         {verificationFields[account].map((field) => (
-          <div key={field.name} className={`min-w-0 space-y-2 ${field.multiline ? "sm:col-span-2" : ""}`}>
+          <Fragment key={field.name}>
+          {field.section && <h3 className="border-b border-border pb-2 font-semibold sm:col-span-2">{field.section}</h3>}
+          <div className={`min-w-0 space-y-2 ${field.multiline ? "sm:col-span-2" : ""}`}>
             <Label htmlFor={`verify-${field.name}`}>{field.label}</Label>
             {field.multiline ? (
               <Textarea id={`verify-${field.name}`} required rows={3} maxLength={500} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
@@ -38,6 +40,7 @@ function VerificationForm({ account }: { account: "business" | "personal" }) {
               <Input id={`verify-${field.name}`} required type={field.type ?? "text"} maxLength={150} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
             )}
           </div>
+          </Fragment>
         ))}
       </div>
       <section className="space-y-4 border-t border-border pt-4">
