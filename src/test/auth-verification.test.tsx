@@ -27,7 +27,7 @@ describe("Sign-in verification emails", () => {
     render(<Page />);
     fireEvent.change(screen.getByPlaceholderText("Email"), { target: { value: "person@example.com" } });
     fireEvent.change(screen.getByPlaceholderText("Password"), { target: { value: "test-password" } });
-    fireEvent.submit(screen.getByRole("button", { name: "Sign in", exact: true }).closest("form") as HTMLFormElement);
+    fireEvent.submit(screen.getByRole("button", { name: /^Sign in$/ }).closest("form") as HTMLFormElement);
     expect(await screen.findByRole("status")).toHaveTextContent("Your email is not verified yet");
     expect(mocks.resend).not.toHaveBeenCalled();
   });
