@@ -34,10 +34,15 @@ function VerificationForm({ account }: { account: "business" | "personal" }) {
           {field.section && <h3 className="border-b border-border pb-2 font-semibold sm:col-span-2">{field.section}</h3>}
           <div className={`min-w-0 space-y-2 ${field.multiline ? "sm:col-span-2" : ""}`}>
             <Label htmlFor={`verify-${field.name}`}>{field.label}</Label>
-            {field.multiline ? (
-              <Textarea id={`verify-${field.name}`} required rows={3} maxLength={500} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
+            {field.options ? (
+              <select id={`verify-${field.name}`} required={!field.optional} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
+                <option value="" disabled>Select…</option>
+                {field.options.map((option) => <option key={option} value={option}>{option}</option>)}
+              </select>
+            ) : field.multiline ? (
+              <Textarea id={`verify-${field.name}`} required={!field.optional} rows={3} maxLength={500} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
             ) : (
-              <Input id={`verify-${field.name}`} required type={field.type ?? "text"} maxLength={150} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
+              <Input id={`verify-${field.name}`} required={!field.optional} type={field.type ?? "text"} maxLength={150} value={values[field.name] ?? ""} onChange={(event) => setValues({ ...values, [field.name]: event.target.value })} />
             )}
           </div>
           </Fragment>
