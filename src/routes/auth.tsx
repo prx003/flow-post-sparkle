@@ -32,6 +32,9 @@ function AuthPage() {
   const [username, setUsername] = useState("");
   const [accountType, setAccountType] = useState<"personal" | "business">("personal");
   const [busy, setBusy] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [verificationPending, setVerificationPending] = useState(false);
+  const [verificationStatus, setVerificationStatus] = useState("");
 
   if (session) return <Navigate to="/" />;
 
@@ -46,14 +49,48 @@ function AuthPage() {
           options: { emailRedirectTo: window.location.origin, data: { display_name: name, username, account_type: accountType } },
         });
         if (error) throw error;
-        if (!data.session) toast.success("Check your email to confirm your account.");
+        if (!data.session) {
+          setVerificationPending(true);
+          setVerificationStatus("Check your inbox and spam folder for your verification link.");
+          toast.success("Check your email to confirm your account.");
+        }
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error?.code === "email_not_confirmed") {
+          setVerificationPending(true);
+          setVerificationStatus("Your email is not verified yet. Request a new verification link below.");
+          return;
+        }
         if (error) throw error;
       }
     } catch (err) {
       toast.error((err as Error).message);
     } finally { setBusy(false); }
+  };
+
+  const resendVerification = async () => {
+    const address = email.trim();
+    if (!address || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(address)) {
+      toast.error("Enter your email address first.");
+      return;
+    }
+    setResending(true);
+    setVerificationStatus("");
+    try {
+      const { error } = await supabase.auth.resend({
+        type: "signup",
+        email: address,
+        options: { emailRedirectTo: window.location.origin },
+      });
+      if (error) throw error;
+      setVerificationStatus("Verification email requested. If your account needs verification, check your inbox and spam folder.");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Could not request a verification email. Please try again.";
+      setVerificationStatus(message);
+      toast.error(message);
+    } finally {
+      setResending(false);
+    }
   };
 
   const google = async () => {
@@ -86,6 +123,14 @@ function AuthPage() {
         <Input required type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input required type="password" minLength={6} placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <Button type="submit" variant="hero" className="h-11 w-full" disabled={busy}>{busy ? "Please wait…" : mode === "in" ? "Sign in" : "Create account"}</Button>
+        {(mode === "in" || verificationPending) && (
+          <div className="space-y-2">
+            {verificationStatus && <p role="status" className="text-sm text-muted-foreground">{verificationStatus}</p>}
+            <Button type="button" variant="ghost" className="w-full" disabled={busy || resending} onClick={resendVerification}>
+              {resending ? "Requesting…" : "Resend verification email"}
+            </Button>
+          </div>
+        )}
         <div className="flex items-center gap-3 text-xs text-muted-foreground"><span className="h-px flex-1 bg-border" />or<span className="h-px flex-1 bg-border" /></div>
         <Button type="button" variant="outline" className="h-11 w-full rounded-full" onClick={google}>Continue with Google</Button>
         <p className="text-center text-sm text-muted-foreground">

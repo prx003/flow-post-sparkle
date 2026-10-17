@@ -1,4 +1,6 @@
 # Tasks
+- [x] Add verification-email resend and unconfirmed-login recovery; verify button behavior and error handling.
+- [ ] Confirm verification email delivery with the existing account service owner — hosted email settings and delivery logs are not accessible from this project.
 - [x] Add account-specific business/shop verification and personal KYC forms with document selection, including business representative KYC; submission remains unavailable pending private storage and review persistence.
 - [ ] Add music preview playback, seeking, volume and song-label editing; verify in the signed-in story form without publishing content.
 - [x] Set menu order to Home, Reels, Explore, Notifications, Messages and verify Create is available only on the own profile.
