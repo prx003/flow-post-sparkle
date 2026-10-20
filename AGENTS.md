@@ -18,3 +18,4 @@
 - Keep media overlay colors independent of the page theme and use the shared social Button variant for composer actions, so controls stay legible in both appearance modes.
 - Keep music selection and preview editing in the shared MusicPicker; stream catalog previews only in the editor and save title/artist through the existing content fields, because preview playback is not a published soundtrack.
 - Keep account verification in AccountVerification with account-specific field definitions; never persist identity details or documents locally or claim submission before private storage and review persistence are connected.
+- Keep Capacitor Android/iOS projects pointed at the explicit HTTPS published origin with a bundled connection-error page; the TanStack Start app requires hosted SSR and must not be treated as static Vite output. Keep signing secrets outside source control.
