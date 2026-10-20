@@ -1,5 +1,6 @@
 # Tasks
-- [ ] Prepare Android and iOS native projects using the existing published app; document signing and native build requirements.
+- [x] Prepare Android and iOS native projects using the existing published app; document signing and native build requirements.
+- [ ] Compile/sign APK and iOS archive and test on devices — blocked by missing Android SDK/JDK, macOS/Xcode, and developer signing accounts.
 - [x] Add verification-email resend and unconfirmed-login recovery; verify button behavior and error handling.
 - [ ] Confirm verification email delivery with the existing account service owner — hosted email settings and delivery logs are not accessible from this project.
 - [x] Add account-specific business/shop verification and personal KYC forms with document selection, including business representative KYC; submission remains unavailable pending private storage and review persistence.

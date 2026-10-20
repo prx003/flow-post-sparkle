@@ -24,6 +24,12 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Take photos and videos for your posts, stories and reels.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Record audio when filming your stories and reels.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Choose photos and videos for your posts, stories and reels.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
